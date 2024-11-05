@@ -24,7 +24,7 @@ class TechStackResource extends Resource
         return $form
             ->schema([
                 Forms\Components\FileUpload::make('logo')
-                    ->required()->imageEditor()->acceptedFileTypes(['image/*'])
+                    ->required()->imageEditor()->image()
                     ->columnSpanFull()->maxSize(10 * 1024),
                 Forms\Components\TextInput::make('name')
                     ->required()

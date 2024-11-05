@@ -13,7 +13,7 @@ class CreateProject extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['slug'] = Str::slug($data['slug']) . time();
+        $data['slug'] = Str::slug($data['name']) . time();
         return $data;
     }
 }

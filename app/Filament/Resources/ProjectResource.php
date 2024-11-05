@@ -6,8 +6,10 @@ use App\Filament\Resources\ProjectResource\Pages;
 use App\Filament\Resources\ProjectResource\RelationManagers;
 use App\Models\Project;
 use Filament\Forms;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -15,6 +17,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ProjectResource extends Resource
@@ -36,22 +39,29 @@ class ProjectResource extends Resource
                 Forms\Components\RichEditor::make('description')
                     ->required()
                     ->columnSpanFull(),
+                Section::make('Tech Stacks')
+                    ->description('Technologies used to develop the project')->schema([
+                            Repeater::make('stacksUsed')
+                                ->label('')
+                                ->relationship()
+                                ->schema([
+                                    Select::make('tech_stack_id')
+                                        ->label('Choose Tech Stack')
+                                        ->relationship('techStack', 'name')
+                                        ->native(false)
+                                        ->createOptionForm([
+                                            FileUpload::make('logo')->required()
+                                                ->columnSpanFull()->image()->imageEditor(),
+                                            TextInput::make('name')->required()->columnSpanFull()
+                                        ])
+                                ])->columnSpanFull()->addActionLabel('+ Add More'),
+                        ]),
                 Forms\Components\TextInput::make('app_url')->label('App URL')
                     ->maxLength(255)->url()
                     ->default(null),
                 Forms\Components\TextInput::make('repo_url')
                     ->label('Repository URL')->maxLength(255)
                     ->url()->default(null),
-                Repeater::make('stacksUsed')->relationship()->schema([
-                    Select::make('tech_stack_id')
-                        ->relationship('techStack', 'name')
-                        ->native(false)
-                        ->createOptionForm([
-                            FileUpload::make('logo')->required()
-                                ->columnSpanFull()->image()->imageEditor(),
-                            TextInput::make('name')->required()->columnSpanFull()
-                        ])
-                ])->columnSpanFull(),
             ]);
     }
 
