@@ -48,4 +48,9 @@ class User extends Authenticatable implements FilamentUser
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function authTokens()
+    {
+        return $this->hasMany(AuthToken::class, 'user_id', 'id');
+    }
 }

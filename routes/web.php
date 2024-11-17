@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/storage/{filename}', function (string $filename) {
+  return response()
+  ->file(storage_path("app/public/{$filename}"), [
+    'Access-Control-Allow-Origin' => '*',
+  ]);
+})->where('filename', '.*');
