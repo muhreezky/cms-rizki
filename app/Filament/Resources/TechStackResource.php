@@ -17,7 +17,8 @@ class TechStackResource extends Resource
 {
     protected static ?string $model = TechStack::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-wrench-screwdriver';
+    protected static ?string $navigationGroup = 'Project';
 
     public static function form(Form $form): Form
     {
