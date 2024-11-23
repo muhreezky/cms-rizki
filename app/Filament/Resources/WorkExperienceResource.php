@@ -19,7 +19,8 @@ class WorkExperienceResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
 
-    protected static ?string $navigationGroup = 'Account';
+    protected static ?string $navigationGroup = 'Work';
+    protected static ?string $navigationLabel = 'Experiences';
 
     public static function form(Form $form): Form
     {

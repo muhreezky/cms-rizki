@@ -22,7 +22,7 @@ class ProjectResource extends Resource
     protected static ?string $model = Project::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-code-bracket';
-    protected static ?string $navigationGroup = 'Project';
+    protected static ?string $navigationGroup = 'Work';
 
     public static function form(Form $form): Form
     {
@@ -32,11 +32,12 @@ class ProjectResource extends Resource
                     ->label('Project Name')
                     ->required()
                     ->maxLength(255)->columnSpanFull(),
-                Forms\Components\FileUpload::make('thumbnail')
-                    ->required()->columnSpanFull()->image()->imageEditor(),
                 Forms\Components\TextInput::make('description')
                     ->required()
                     ->columnSpanFull(),
+                Forms\Components\TextInput::make('app_url')->label('App URL')
+                    ->maxLength(255)->url()->columnSpanFull()
+                    ->default(null),
                 Section::make('Tech Stacks')
                     ->description('Technologies used to develop the project')->schema([
                             Repeater::make('stacksUsed')
@@ -47,6 +48,7 @@ class ProjectResource extends Resource
                                         ->label('')
                                         ->relationship('techStack', 'name')
                                         ->native(false)
+                                        ->searchable()
                                         ->createOptionForm([
                                             FileUpload::make('logo')->required()
                                                 ->columnSpanFull()->image()->imageEditor(),
@@ -54,9 +56,6 @@ class ProjectResource extends Resource
                                         ])
                                 )->columnSpanFull()->addActionLabel('+ Add More'),
                         ]),
-                Forms\Components\TextInput::make('app_url')->label('App URL')
-                    ->maxLength(255)->url()
-                    ->default(null),
             ]);
     }
 
