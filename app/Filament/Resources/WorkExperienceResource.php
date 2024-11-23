@@ -2,60 +2,67 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\MessageResource\Pages;
-use App\Filament\Resources\MessageResource\RelationManagers;
-use App\Models\Message;
+use App\Filament\Resources\WorkExperienceResource\Pages;
+use App\Filament\Resources\WorkExperienceResource\RelationManagers;
+use App\Models\WorkExperience;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class MessageResource extends Resource
+class WorkExperienceResource extends Resource
 {
-    protected static ?string $model = Message::class;
+    protected static ?string $model = WorkExperience::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-envelope';
+    protected static ?string $navigationIcon = 'heroicon-o-briefcase';
+
     protected static ?string $navigationGroup = 'Account';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\TextInput::make('company_name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
+                Forms\Components\TextInput::make('position')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\RichEditor::make('content')
+                    ->maxLength(100),
+                Forms\Components\RichEditor::make('description')
                     ->required()
                     ->columnSpanFull(),
+                Forms\Components\DatePicker::make('start_date')
+                    ->native(false)
+                    ->displayFormat('M Y')
+                    ->required(),
+                Forms\Components\DatePicker::make('end_date')
+                    ->native(false)
+                    ->displayFormat('M Y'),
             ]);
     }
 
-    public static function canEdit(Model $model): bool
+    public static function getEloquentQuery(): Builder
     {
-      return false;
-    }
-
-    public static function canCreate(): bool
-    {
-      return false;
+        return parent::getEloquentQuery()->where('user_id', auth()->user()->id);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('company_name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
+                Tables\Columns\TextColumn::make('position')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('start_date')
+                    ->date()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('end_date')
+                    ->date()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -69,7 +76,6 @@ class MessageResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -89,10 +95,9 @@ class MessageResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListMessages::route('/'),
-            'create' => Pages\CreateMessage::route('/create'),
-            'view' => Pages\ViewMessage::route('/{record}'),
-            'edit' => Pages\EditMessage::route('/{record}/edit'),
+            'index' => Pages\ListWorkExperiences::route('/'),
+            'create' => Pages\CreateWorkExperience::route('/create'),
+            'edit' => Pages\EditWorkExperience::route('/{record}/edit'),
         ];
     }
 }

@@ -16,9 +16,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ProjectResource extends Resource
 {
@@ -37,7 +34,7 @@ class ProjectResource extends Resource
                     ->maxLength(255)->columnSpanFull(),
                 Forms\Components\FileUpload::make('thumbnail')
                     ->required()->columnSpanFull()->image()->imageEditor(),
-                Forms\Components\RichEditor::make('description')
+                Forms\Components\TextInput::make('description')
                     ->required()
                     ->columnSpanFull(),
                 Section::make('Tech Stacks')
@@ -45,9 +42,9 @@ class ProjectResource extends Resource
                             Repeater::make('stacksUsed')
                                 ->label('')
                                 ->relationship()
-                                ->schema([
+                                ->simple(
                                     Select::make('tech_stack_id')
-                                        ->label('Choose Tech Stack')
+                                        ->label('')
                                         ->relationship('techStack', 'name')
                                         ->native(false)
                                         ->createOptionForm([
@@ -55,14 +52,11 @@ class ProjectResource extends Resource
                                                 ->columnSpanFull()->image()->imageEditor(),
                                             TextInput::make('name')->required()->columnSpanFull()
                                         ])
-                                ])->columnSpanFull()->addActionLabel('+ Add More'),
+                                )->columnSpanFull()->addActionLabel('+ Add More'),
                         ]),
                 Forms\Components\TextInput::make('app_url')->label('App URL')
                     ->maxLength(255)->url()
                     ->default(null),
-                Forms\Components\TextInput::make('repo_url')
-                    ->label('Repository URL')->maxLength(255)
-                    ->url()->default(null),
             ]);
     }
 

@@ -20,15 +20,12 @@ class AuthTokenResource extends Resource
     protected static ?string $model = AuthToken::class;
 
     protected static ?string $navigationIcon = 'heroicon-s-key';
+    protected static ?string $navigationGroup = 'Account';
 
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                // Forms\Components\Select::make('user_id')
-                //     ->required()->native(false)->searchable()
-                //     ->relationship('user', 'name')
-            ]);
+            ->schema([]);
     }
 
     public static function getEloquentQuery(): Builder
