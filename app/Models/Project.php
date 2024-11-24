@@ -8,9 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     use HasFactory;
-
-    public function stacksUsed()
-    {
-        return $this->hasMany(StackOfProject::class, 'project_id', 'id');
-    }
+    
+    protected $casts = [
+        'technologies' => 'array'
+    ];
 }

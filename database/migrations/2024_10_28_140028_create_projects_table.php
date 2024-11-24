@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('description');
             $table->string('app_url')->nullable();
+            $table->string('thumbnail');
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
+            $table->text('technologies');
             $table->timestamps();
 
             $table->index('slug');

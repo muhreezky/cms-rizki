@@ -32,30 +32,17 @@ class ProjectResource extends Resource
                     ->label('Project Name')
                     ->required()
                     ->maxLength(255)->columnSpanFull(),
-                Forms\Components\TextInput::make('description')
+                Forms\Components\Textarea::make('description')
                     ->required()
                     ->columnSpanFull(),
+                Forms\Components\FileUpload::make('thumbnail')
+                    ->image()->imageEditor()->columnSpanFull()->required(),
+                Forms\Components\TagsInput::make('technologies')
+                    ->label('Tech Stack')->columnSpanFull()
+                    ->splitKeys(['Tab'])->required()
+                    ->placeholder('Technologies used to build project (e.g. React, Express, Laravel, etc.)'),
                 Forms\Components\TextInput::make('app_url')->label('App URL')
-                    ->maxLength(255)->url()->columnSpanFull()
-                    ->default(null),
-                Section::make('Tech Stacks')
-                    ->description('Technologies used to develop the project')->schema([
-                            Repeater::make('stacksUsed')
-                                ->label('')
-                                ->relationship()
-                                ->simple(
-                                    Select::make('tech_stack_id')
-                                        ->label('')
-                                        ->relationship('techStack', 'name')
-                                        ->native(false)
-                                        ->searchable()
-                                        ->createOptionForm([
-                                            FileUpload::make('logo')->required()
-                                                ->columnSpanFull()->image()->imageEditor(),
-                                            TextInput::make('name')->required()->columnSpanFull()
-                                        ])
-                                )->columnSpanFull()->addActionLabel('+ Add More'),
-                        ]),
+                    ->maxLength(255)->url()->columnSpanFull(),
             ]);
     }
 
